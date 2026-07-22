@@ -243,12 +243,11 @@ function initScrollSpyRail() {
 
   function onScroll() {
     let currentIdx = 0;
-    const scrollPos = window.scrollY + window.innerHeight * 0.45;
+    const triggerPos = window.innerHeight * 0.45;
 
     chapterBlocks.forEach((block, idx) => {
-      const top = block.offsetTop;
-      const height = block.offsetHeight;
-      if (scrollPos >= top && scrollPos < top + height + 120) {
+      const rect = block.getBoundingClientRect();
+      if (rect.top <= triggerPos) {
         currentIdx = idx;
       }
     });
@@ -261,14 +260,15 @@ function initScrollSpyRail() {
       }
     });
 
-    if (railLine) {
+    if (railLine && chapterBlocks.length > 1) {
       const pct = (currentIdx / (chapterBlocks.length - 1)) * 100;
       railLine.style.height = `${pct}%`;
     }
   }
 
   railItems.forEach((item, idx) => {
-    item.addEventListener('click', () => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
       chapterBlocks[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
   });

@@ -666,15 +666,17 @@ button {
 
 .layers-layout {
   display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 70px;
+  grid-template-columns: 240px 1fr;
+  gap: 60px;
   align-items: start;
   position: relative;
 }
 
 .layers-rail {
   position: sticky;
-  top: 130px;
+  top: 140px;
+  align-self: start;
+  z-index: 20;
   padding-left: 24px;
   border-left: 1px solid var(--border-subtle);
 }
