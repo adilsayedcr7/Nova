@@ -465,78 +465,34 @@ function initNavigationRouter() {
 }
 
 /* ==========================================================================
-   8. One-Scroll Section Snap Directional Engine
+   8. Section Snap Scroll Auxiliary Engine
    ========================================================================== */
 function initSectionSnapScroll() {
-  if (window.innerWidth <= 992) return;
-
-  const sections = Array.from(document.querySelectorAll('#view-home > section'));
-  if (!sections.length) return;
-
-  let isScrolling = false;
-
-  function getCurrentSectionIndex() {
-    const scrollPos = window.scrollY + window.innerHeight * 0.3;
-    let currentIdx = 0;
-    sections.forEach((sec, idx) => {
-      const top = sec.offsetTop;
-      const height = sec.offsetHeight;
-      if (scrollPos >= top && scrollPos < top + height) {
-        currentIdx = idx;
-      }
-    });
-    return currentIdx;
-  }
-
-  window.addEventListener('wheel', (e) => {
+  // Native CSS scroll-snap-type: y mandatory on html handles 100% of 60fps section snapping
+  // This helper ensures keyboard Up/Down arrows and hash links navigate smoothly
+  window.addEventListener('keydown', (e) => {
     if (document.querySelector('.modal-backdrop.active')) return;
-    if (window.innerWidth <= 992) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      const sections = Array.from(document.querySelectorAll('#view-home > section'));
+      if (!sections.length) return;
 
-    const currentIdx = getCurrentSectionIndex();
-    const currentSection = sections[currentIdx];
-
-    // Exception: Platform Architecture (#every-layer) permits smooth chapter scrolling
-    if (currentSection && currentSection.id === 'every-layer') {
-      const secTop = currentSection.offsetTop;
-      const secHeight = currentSection.offsetHeight;
-      const curScroll = window.scrollY;
-      const winHeight = window.innerHeight;
-
-      if (e.deltaY < 0 && curScroll <= secTop + 30) {
-        e.preventDefault();
-        if (!isScrolling && currentIdx > 0) {
-          isScrolling = true;
-          sections[currentIdx - 1].scrollIntoView({ behavior: 'smooth' });
-          setTimeout(() => { isScrolling = false; }, 850);
+      const scrollPos = window.scrollY + window.innerHeight * 0.3;
+      let currentIdx = 0;
+      sections.forEach((sec, idx) => {
+        const top = sec.offsetTop;
+        const height = sec.offsetHeight;
+        if (scrollPos >= top && scrollPos < top + height) {
+          currentIdx = idx;
         }
-      } else if (e.deltaY > 0 && curScroll + winHeight >= secTop + secHeight - 30) {
-        e.preventDefault();
-        if (!isScrolling && currentIdx < sections.length - 1) {
-          isScrolling = true;
-          sections[currentIdx + 1].scrollIntoView({ behavior: 'smooth' });
-          setTimeout(() => { isScrolling = false; }, 850);
-        }
-      }
-      return;
-    }
+      });
 
-    if (Math.abs(e.deltaY) > 15) {
-      if (isScrolling) {
+      if (e.key === 'ArrowDown' && currentIdx < sections.length - 1) {
         e.preventDefault();
-        return;
-      }
-
-      if (e.deltaY > 0 && currentIdx < sections.length - 1) {
-        e.preventDefault();
-        isScrolling = true;
         sections[currentIdx + 1].scrollIntoView({ behavior: 'smooth' });
-        setTimeout(() => { isScrolling = false; }, 850);
-      } else if (e.deltaY < 0 && currentIdx > 0) {
+      } else if (e.key === 'ArrowUp' && currentIdx > 0) {
         e.preventDefault();
-        isScrolling = true;
         sections[currentIdx - 1].scrollIntoView({ behavior: 'smooth' });
-        setTimeout(() => { isScrolling = false; }, 850);
       }
     }
-  }, { passive: false });
+  });
 }
