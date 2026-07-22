@@ -1,12 +1,7 @@
-# NovaMLM Software — Cursor & AI Rules (Dark Black Theme Lock)
+# Cursor Rules — Nova Brand System
 
-Strictly enforce rules from Brand Guidelines.pdf and DESIGN_SYSTEM_RULES.md:
-
-- Font: Use Figtree ONLY across all elements (headlines, body, nav, badges, numbers).
-- Page Background: #08070B (Sleek Dark Shade of Black)
-- Card Surface: #121017 (--navy-card / --charcoal)
-- Primary Accent: #0090FF / #1164F0 (--blue-vibrant / --nova)
-- Highlight Cyan: #5EEBFC (--cyan-light / --moss)
-- Primary Text: #FFFFFF (--white / --bone)
-- Secondary Text: #A19CBB (--smoke-blue / --smoke)
-- Logo: Official geometric 'N' block brandmark + NovaMLM Software lockup.
+- **Font**: Figtree ONLY (`font-family: 'Figtree', sans-serif`).
+- **Background**: `#08070B` (Sleek Dark Black).
+- **Cards**: `#121017`.
+- **Accents**: `#2563EB` (Royal Blue) & `#1D4ED8` (Corporate Blue).
+- **Logo**: Geometric block `N` icon + bold white `Nova` text.

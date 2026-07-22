@@ -289,7 +289,7 @@ button {
 .brand-logo {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   text-decoration: none;
   border-radius: var(--radius-sm);
 }
@@ -304,34 +304,13 @@ button {
   align-items: center;
 }
 
-.brand-text-container {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-}
-
 .brand-title {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 1.45rem;
-  letter-spacing: -0.02em;
+  font-size: 1.75rem;
+  letter-spacing: -0.03em;
   color: var(--white);
-}
-
-.brand-title-accent {
-  background: linear-gradient(90deg, #5EEBFC 0%, #0090FF 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 800;
-}
-
-.brand-subtext {
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--white);
-  letter-spacing: 0.02em;
-  margin-top: 3px;
+  line-height: 1;
 }
 
 .nav-menu {

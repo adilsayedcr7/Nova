@@ -1,6 +1,6 @@
 # AGENTS.md — Instructions for Autonomous AI Agents
 
-## Mandatory Compliance: NovaMLM Brand Guidelines
+## Mandatory Compliance: Nova Brand Guidelines
 
 All AI agents, subagents, and automated assistants operating in this codebase MUST strictly follow the design system rules defined in [DESIGN_SYSTEM_RULES.md](file:///Users/adilsayed/Desktop/Nova/DESIGN_SYSTEM_RULES.md) and [Brand Guidelines.pdf](file:///Users/adilsayed/Desktop/Nova/Brand%20Guidelines.pdf).
 
@@ -10,11 +10,11 @@ All AI agents, subagents, and automated assistants operating in this codebase MU
 2. **Colors**:
    - Sleek Dark Black: `#08070B` (Page Background)
    - Card Surface: `#121017`
-   - Electric Blue: `#1164F0`
-   - Vibrant Cyan Blue: `#0090FF`
-   - Light Aqua Cyan: `#5EEBFC`
+   - Corporate Blue: `#1D4ED8`
+   - Royal Blue: `#2563EB`
+   - Soft Sky Blue: `#60A5FA`
    - Primary Text: `#FFFFFF`
-   - Secondary Text: `#A19CBB`
-3. **Logo**: Geometric block `N` icon + `NovaMLM Software` text lockup.
+   - Secondary Text: `#B8B3D3`
+3. **Logo**: Geometric block `N` icon + bold white `Nova` text lockup.
 
 Do NOT modify or introduce styles that violate these rules.
