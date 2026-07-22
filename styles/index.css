@@ -62,6 +62,8 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
   background-color: var(--navy-dark);
   color: var(--white);
   font-family: var(--font-body);
@@ -169,6 +171,58 @@ button {
   background-color: var(--navy-card);
   border-top: 1px solid var(--border-subtle);
   border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Viewport Height & Snap-Scroll Alignment Engine */
+@media (min-width: 993px) {
+  .hero-section,
+  .problem-section,
+  #who-its-for,
+  #how-it-works,
+  #why-choose-novamlm,
+  .final-cta-section {
+    min-height: 100vh;
+    height: 100vh;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .hero-section {
+    padding-top: 80px;
+  }
+
+  .hero-section .hero-content,
+  .problem-section .problem-content,
+  #who-its-for .container,
+  #how-it-works .container,
+  #why-choose-novamlm .container,
+  .final-cta-section .final-cta-content {
+    width: 100%;
+  }
+
+  /* EXCEPTION: Platform Architecture (#every-layer) scrolls naturally through 5 chapters */
+  #every-layer {
+    min-height: auto;
+    height: auto;
+    padding: 180px 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+    display: block;
+    overflow: visible;
+  }
+
+  .footer {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+  }
 }
 
 /* Eyebrow Pill Badge */
