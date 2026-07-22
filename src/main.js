@@ -239,41 +239,56 @@ function initScrollSpyRail() {
   const railItems = document.querySelectorAll('.rail-item');
   const chapterBlocks = document.querySelectorAll('.chapter-block');
   const railLine = document.querySelector('.layers-rail-line');
+  const chaptersStack = document.querySelector('.chapters-stack');
   if (!railItems.length || !chapterBlocks.length) return;
 
   function onScroll() {
-    let currentIdx = 0;
     const triggerPos = window.innerHeight * 0.45;
 
+    // 1. Instant active chapter highlight based on current viewport position
+    let activeIdx = 0;
     chapterBlocks.forEach((block, idx) => {
       const rect = block.getBoundingClientRect();
       if (rect.top <= triggerPos) {
-        currentIdx = idx;
+        activeIdx = idx;
       }
     });
 
     railItems.forEach((item, idx) => {
-      if (idx === currentIdx) {
+      if (idx === activeIdx) {
         item.classList.add('active');
       } else {
         item.classList.remove('active');
       }
     });
 
+    // 2. Fluid continuous height animation for the vertical indicator line
     if (railLine && chapterBlocks.length > 1) {
-      const pct = (currentIdx / (chapterBlocks.length - 1)) * 100;
-      railLine.style.height = `${pct}%`;
+      const firstTop = chapterBlocks[0].getBoundingClientRect().top;
+      const lastTop = chapterBlocks[chapterBlocks.length - 1].getBoundingClientRect().top;
+      const totalDistance = lastTop - firstTop;
+
+      if (totalDistance > 0) {
+        const scrolledDistance = triggerPos - firstTop;
+        const progress = Math.max(0, Math.min(1, scrolledDistance / totalDistance));
+        railLine.style.height = `${progress * 100}%`;
+      }
     }
   }
 
   railItems.forEach((item, idx) => {
     item.addEventListener('click', (e) => {
       e.preventDefault();
-      chapterBlocks[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const targetBlock = chapterBlocks[idx];
+      if (targetBlock) {
+        const topOffset = targetBlock.getBoundingClientRect().top + window.scrollY - 140;
+        window.scrollTo({ top: topOffset, behavior: 'smooth' });
+      }
     });
   });
 
-  window.addEventListener('scroll', onScroll);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 }
 
 /* ==========================================================================
