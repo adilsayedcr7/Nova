@@ -465,33 +465,108 @@ function initNavigationRouter() {
 }
 
 /* ==========================================================================
-   8. Section Snap Scroll Auxiliary Engine
+   8. One-Scroll Section Snap Directional Engine
    ========================================================================== */
 function initSectionSnapScroll() {
-  // Native CSS scroll-snap-type: y mandatory on html handles 100% of 60fps section snapping
-  // This helper ensures keyboard Up/Down arrows and hash links navigate smoothly
+  if (window.innerWidth <= 992) return;
+
+  const sections = Array.from(document.querySelectorAll('#view-home > section'));
+  if (!sections.length) return;
+
+  let isAnimating = false;
+  let accumulatedDelta = 0;
+  let scrollTimer = null;
+
+  function getActiveSectionIndex() {
+    const scrollMid = window.scrollY + window.innerHeight * 0.35;
+    let activeIdx = 0;
+    sections.forEach((sec, idx) => {
+      const top = sec.offsetTop;
+      const height = sec.offsetHeight;
+      if (scrollMid >= top && scrollMid < top + height) {
+        activeIdx = idx;
+      }
+    });
+    return activeIdx;
+  }
+
+  function snapToSection(targetIdx) {
+    if (targetIdx < 0 || targetIdx >= sections.length) return;
+    isAnimating = true;
+    const targetSec = sections[targetIdx];
+    const targetTop = targetSec.offsetTop;
+
+    window.scrollTo({
+      top: targetTop,
+      behavior: 'smooth'
+    });
+
+    setTimeout(() => {
+      isAnimating = false;
+    }, 750);
+  }
+
+  window.addEventListener('wheel', (e) => {
+    if (window.innerWidth <= 992) return;
+    if (document.querySelector('.modal-backdrop.active')) return;
+
+    const currentIdx = getActiveSectionIndex();
+    const currentSec = sections[currentIdx];
+
+    // Exception: Platform Architecture (#every-layer)
+    if (currentSec && currentSec.id === 'every-layer') {
+      const secTop = currentSec.offsetTop;
+      const secHeight = currentSec.offsetHeight;
+      const curScroll = window.scrollY;
+      const winHeight = window.innerHeight;
+
+      // Top boundary scrolling UP -> snap to previous section
+      if (e.deltaY < 0 && curScroll <= secTop + 40) {
+        if (isAnimating) { e.preventDefault(); return; }
+        e.preventDefault();
+        if (currentIdx > 0) {
+          snapToSection(currentIdx - 1);
+        }
+      }
+      // Bottom boundary scrolling DOWN -> snap to next section
+      else if (e.deltaY > 0 && curScroll + winHeight >= secTop + secHeight - 40) {
+        if (isAnimating) { e.preventDefault(); return; }
+        e.preventDefault();
+        if (currentIdx < sections.length - 1) {
+          snapToSection(currentIdx + 1);
+        }
+      }
+      return; // Normal smooth scrolling inside #every-layer
+    }
+
+    // For all 100vh sections: single directional wheel tick snaps to adjacent section
+    e.preventDefault();
+    if (isAnimating) return;
+
+    accumulatedDelta += e.deltaY;
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => { accumulatedDelta = 0; }, 150);
+
+    if (Math.abs(accumulatedDelta) > 20 || Math.abs(e.deltaY) > 25) {
+      const direction = (accumulatedDelta || e.deltaY) > 0 ? 1 : -1;
+      accumulatedDelta = 0;
+      snapToSection(currentIdx + direction);
+    }
+  }, { passive: false });
+
+  // Keyboard Navigation Support (ArrowUp / ArrowDown)
   window.addEventListener('keydown', (e) => {
     if (document.querySelector('.modal-backdrop.active')) return;
+    if (window.innerWidth <= 992) return;
+
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      const sections = Array.from(document.querySelectorAll('#view-home > section'));
-      if (!sections.length) return;
-
-      const scrollPos = window.scrollY + window.innerHeight * 0.3;
-      let currentIdx = 0;
-      sections.forEach((sec, idx) => {
-        const top = sec.offsetTop;
-        const height = sec.offsetHeight;
-        if (scrollPos >= top && scrollPos < top + height) {
-          currentIdx = idx;
-        }
-      });
-
+      const currentIdx = getActiveSectionIndex();
       if (e.key === 'ArrowDown' && currentIdx < sections.length - 1) {
         e.preventDefault();
-        sections[currentIdx + 1].scrollIntoView({ behavior: 'smooth' });
+        snapToSection(currentIdx + 1);
       } else if (e.key === 'ArrowUp' && currentIdx > 0) {
         e.preventDefault();
-        sections[currentIdx - 1].scrollIntoView({ behavior: 'smooth' });
+        snapToSection(currentIdx - 1);
       }
     }
   });
