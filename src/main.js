@@ -470,7 +470,7 @@ function initNavigationRouter() {
 function initSectionSnapScroll() {
   if (window.innerWidth <= 992) return;
 
-  const sections = Array.from(document.querySelectorAll('#view-home > section'));
+  const sections = Array.from(document.querySelectorAll('#view-home > section, footer.footer'));
   if (!sections.length) return;
 
   let isAnimating = false;
